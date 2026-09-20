@@ -25,10 +25,53 @@ class PwaConfigController extends BaseController
             $this->response->redirect($this->helper->url->to('DashboardController', 'show'));
         }
 
+        $projectsList = $this->projectModel->getList();
+        $startUriOptions = [
+            '' => t('Dashboard (Default)'),
+            'projects' => t('My Projects'),
+            'tasks' => t('My Tasks'),
+            'activity' => t('My Activity'),
+            'custom' => t('Custom URL (type below)')
+        ];
+
+        if (!empty($projectsList)) {
+            $boardOptions = [];
+            foreach ($projectsList as $id => $name) {
+                $boardOptions['board/' . $id] = t('Board') . ': ' . $name;
+            }
+            $startUriOptions[t('Boards')] = $boardOptions;
+        }
+
+        $values = $this->getPwaConfig();
+        
+        // Determine which option is selected
+        $selectedValue = $values['start_uri'];
+        $isCustom = true;
+        
+        if (isset($startUriOptions[$selectedValue])) {
+            $isCustom = false;
+        } else {
+            foreach ($startUriOptions as $key => $val) {
+                if (is_array($val) && isset($val[$selectedValue])) {
+                    $isCustom = false;
+                    break;
+                }
+            }
+        }
+
+        if ($isCustom && $selectedValue !== '') {
+            $values['start_uri_select'] = 'custom';
+            $values['start_uri_custom'] = $selectedValue;
+        } else {
+            $values['start_uri_select'] = $selectedValue;
+            $values['start_uri_custom'] = '';
+        }
+
         $this->response->html($this->helper->layout->config('PWASimpleCreator:config/settings', [
             'title' => t('PWA Settings'),
-            'values' => $this->getPwaConfig(),
-            'errors' => []
+            'values' => $values,
+            'errors' => [],
+            'startUriOptions' => $startUriOptions
         ]));
     }
 
@@ -52,6 +95,17 @@ class PwaConfigController extends BaseController
             $bgColor = '#333333';
         }
 
+        $startUri = '';
+        if (isset($values['start_uri_select'])) {
+            if ($values['start_uri_select'] === 'custom') {
+                $startUri = isset($values['start_uri_custom']) ? $values['start_uri_custom'] : '';
+            } else {
+                $startUri = $values['start_uri_select'];
+            }
+        } elseif (isset($values['start_uri'])) {
+            $startUri = $values['start_uri'];
+        }
+
         $config = [
             'pwa_app_name' => !empty($values['app_name']) ? $values['app_name'] : 'Kanboard',
             'pwa_short_name' => !empty($values['short_name']) ? $values['short_name'] : 'Kanboard',
@@ -59,7 +113,7 @@ class PwaConfigController extends BaseController
             'pwa_theme_mode' => $mode,
             'pwa_theme_color' => $themeColor,
             'pwa_background_color' => $bgColor,
-            'pwa_start_uri' => isset($values['start_uri']) ? ltrim($values['start_uri'], '/') : ''
+            'pwa_start_uri' => ltrim($startUri, '/')
         ];
 
         if ($this->configModel->save($config)) {

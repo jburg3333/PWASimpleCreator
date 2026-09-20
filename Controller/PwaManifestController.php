@@ -22,7 +22,18 @@ class PwaManifestController extends BaseController
             $basePath .= '/';
         }
         $pluginUrl = $basePath . 'plugins/PWASimpleCreator/';
-        $startUrl = $basePath . ltrim($startUri, '/');
+        
+        if ($startUri === '') {
+            $startUrl = $this->helper->url->to('DashboardController', 'show');
+        } elseif ($startUri === 'projects') {
+            $startUrl = $this->helper->url->to('DashboardController', 'projects');
+        } elseif ($startUri === 'tasks') {
+            $startUrl = $this->helper->url->to('DashboardController', 'tasks');
+        } elseif ($startUri === 'activity') {
+            $startUrl = $this->helper->url->to('DashboardController', 'activity');
+        } else {
+            $startUrl = $basePath . ltrim($startUri, '/');
+        }
 
         $lang = $this->languageModel->getCurrentLanguage();
         $langCode = !empty($lang) ? substr($lang, 0, 2) : 'en';

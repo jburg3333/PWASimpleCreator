@@ -58,9 +58,25 @@
     <fieldset>
         <legend><?= t('Start Path (Optional)') ?></legend>
 
-        <?= $this->form->label(t('Start URI (e.g. board/1)'), 'start_uri') ?>
-        <?= $this->form->text('start_uri', $values, $errors) ?>
-        <p class="form-help"><?= t('Relative path to open when launching the app. Leave empty to go to the Dashboard.') ?></p>
+        <?= $this->form->label(t('Start Page'), 'start_uri_select') ?>
+        <?= $this->form->select('start_uri_select', $startUriOptions, $values, $errors) ?>
+
+        <div id="custom-uri-container" style="display: <?= ($values['start_uri_select'] ?? '') === 'custom' ? 'block' : 'none' ?>; margin-top: 15px; padding-left: 15px; border-left: 2px solid #ccc;">
+            <?= $this->form->label(t('Custom Start URI (e.g. board/1)'), 'start_uri_custom') ?>
+            <?= $this->form->text('start_uri_custom', $values, $errors) ?>
+            <p class="form-help"><?= t('Relative path to open when launching the app.') ?></p>
+        </div>
+
+        <script>
+            document.querySelector('select[name="start_uri_select"]').addEventListener('change', function() {
+                var container = document.getElementById('custom-uri-container');
+                if (this.value === 'custom') {
+                    container.style.display = 'block';
+                } else {
+                    container.style.display = 'none';
+                }
+            });
+        </script>
     </fieldset>
 
     <div class="form-actions">
