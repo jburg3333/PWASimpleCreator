@@ -16,7 +16,12 @@ class PwaManifestController extends BaseController
         $startUri = $this->configModel->get('pwa_start_uri', 'board/1');
 
         $basePath = $this->helper->url->dir();
-        $pluginUrl = $this->helper->url->base() . 'plugins/PWASimpleCreator/';
+        if (empty($basePath)) {
+            $basePath = '/';
+        } elseif (substr($basePath, -1) !== '/') {
+            $basePath .= '/';
+        }
+        $pluginUrl = $basePath . 'plugins/PWASimpleCreator/';
         $startUrl = $basePath . ltrim($startUri, '/');
 
         $lang = $this->languageModel->getCurrentLanguage();

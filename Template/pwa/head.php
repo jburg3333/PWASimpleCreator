@@ -6,6 +6,11 @@
  */
 
 $baseUrl = $this->url->dir();
+if (empty($baseUrl)) {
+    $baseUrl = '/';
+} elseif (substr($baseUrl, -1) !== '/') {
+    $baseUrl .= '/';
+}
 
 $manifestUrl = $this->url->href('PwaManifestController', 'manifest', ['plugin' => 'PWASimpleCreator']);
 $swUrl       = $baseUrl . 'plugins/PWASimpleCreator/sw.php';
