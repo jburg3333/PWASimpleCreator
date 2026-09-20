@@ -38,3 +38,9 @@ All notable changes to the PWA Simple Creator plugin will be documented in this 
 - **Platform Support**: Installation support for **Windows 11** (Chrome, Edge) and **Android** (Chrome).
 - **iOS / Safari Support**: Basic support via "Add to Home Screen".
 - `README.md` with installation, configuration, and usage instructions.
+
+## [1.3.0] - 2026-09-20
+- Fixed Service Worker and Manifest paths for root domains with URL rewriting enabled.
+- Added dynamic dropdown to select start URL (Dashboard, Projects, Tasks, Activity, or specific Boards).
+- Flattened dropdown options to fix array-to-string conversion error.
+- Added Spanish translations for new options.

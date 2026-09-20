@@ -35,11 +35,10 @@ class PwaConfigController extends BaseController
         ];
 
         if (!empty($projectsList)) {
-            $boardOptions = [];
+            $startUriOptions['---'] = '--------------------';
             foreach ($projectsList as $id => $name) {
-                $boardOptions['board/' . $id] = t('Board') . ': ' . $name;
+                $startUriOptions['board/' . $id] = t('Board') . ': ' . $name;
             }
-            $startUriOptions[t('Boards')] = $boardOptions;
         }
 
         $values = $this->getPwaConfig();
@@ -48,15 +47,8 @@ class PwaConfigController extends BaseController
         $selectedValue = $values['start_uri'];
         $isCustom = true;
         
-        if (isset($startUriOptions[$selectedValue])) {
+        if (isset($startUriOptions[$selectedValue]) && $selectedValue !== '---') {
             $isCustom = false;
-        } else {
-            foreach ($startUriOptions as $key => $val) {
-                if (is_array($val) && isset($val[$selectedValue])) {
-                    $isCustom = false;
-                    break;
-                }
-            }
         }
 
         if ($isCustom && $selectedValue !== '') {

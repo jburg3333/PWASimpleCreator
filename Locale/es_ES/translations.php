@@ -27,4 +27,13 @@ return [
     'Description' => 'Descripción',
     'Description for the installer. Defaults to "Kanboard PWA" if empty.' => 'Descripción para el instalador. Si lo dejas vacío usará "Kanboard PWA".',
     'Unable to save your settings.' => 'No se han podido guardar los ajustes.',
+    'Start Page' => 'Página de Inicio',
+    'Custom Start URI (e.g. board/1)' => 'URI de Inicio Personalizada (Ej. board/1)',
+    'Relative path to open when launching the app.' => 'Ruta relativa para abrir al iniciar la app.',
+    'Dashboard (Default)' => 'Panel de control (Por defecto)',
+    'My Projects' => 'Mis Proyectos',
+    'My Tasks' => 'Mis Tareas',
+    'My Activity' => 'Mi Actividad',
+    'Custom URL (type below)' => 'URL Personalizada (escribir abajo)',
+    'Board' => 'Tablero',
 ];
